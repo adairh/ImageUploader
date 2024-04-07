@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "883206710650",
+    "project_id": "imageview-93c21",
+    "storage_bucket": "imageview-93c21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883206710650:android:5d63f3bcd8e445cd2e22c3",
+        "android_client_info": {
+          "package_name": "me.sjihh.imageuploader"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUpYSDYZVrWfuqsRX6WgLJsYIIsjgKwko"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
