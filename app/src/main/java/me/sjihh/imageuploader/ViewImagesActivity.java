@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ public class ViewImagesActivity extends AppCompatActivity {
     private List<String> imageUrls = new ArrayList<>();
     private FirebaseStorage storage;
     private StorageReference storageRef;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class ViewImagesActivity extends AppCompatActivity {
         adapter = new ImageAdapter(imageUrls);
         recyclerView.setAdapter(adapter);
 
+        progressBar = findViewById(R.id.progressBar);
+
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child("images");
 
@@ -47,6 +51,8 @@ public class ViewImagesActivity extends AppCompatActivity {
     }
 
     private void loadImagesFromFirebase() {
+        progressBar.setVisibility(View.VISIBLE);
+
         storageRef.listAll()
                 .addOnSuccessListener(listResult -> {
                     for (StorageReference item : listResult.getItems()) {
@@ -55,11 +61,15 @@ public class ViewImagesActivity extends AppCompatActivity {
                             adapter.notifyDataSetChanged();
                         });
                     }
+
+                    progressBar.setVisibility(View.GONE);
                 })
                 .addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(ViewImagesActivity.this, "Failed to load images", Toast.LENGTH_SHORT).show();
                 });
     }
+
 
     private class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
