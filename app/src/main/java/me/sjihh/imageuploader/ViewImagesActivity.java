@@ -99,7 +99,7 @@ public class ViewImagesActivity extends AppCompatActivity {
             Glide.with(ViewImagesActivity.this)
                     .load(imageUrl)
                     .placeholder(R.drawable.ic_launcher_foreground)
-                    .override(320, 320) // Resizing to reduce memory footprint
+                    .override(150, 150) // Resizing to reduce memory footprint
                     .thumbnail(0.1f) // Load a low-resolution thumbnail first
                     .into(holder.imageView);
 
