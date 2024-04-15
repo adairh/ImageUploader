@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,8 @@ public class ViewImagesActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private ProgressBar progressBar;
+    private int loadedImageCount = 0;
+    private int pageSize = 20; // Adjust as needed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,7 @@ public class ViewImagesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_images);
 
         recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 3)); // Set the span count for grid layout
         adapter = new ImageAdapter(imageUrls);
         recyclerView.setAdapter(adapter);
 
@@ -55,10 +58,14 @@ public class ViewImagesActivity extends AppCompatActivity {
 
         storageRef.listAll()
                 .addOnSuccessListener(listResult -> {
+                    int totalItems = listResult.getItems().size();
                     for (StorageReference item : listResult.getItems()) {
                         item.getDownloadUrl().addOnSuccessListener(uri -> {
                             imageUrls.add(uri.toString());
-                            adapter.notifyDataSetChanged();
+                            loadedImageCount++;
+                            if (loadedImageCount % pageSize == 0 || loadedImageCount == totalItems) {
+                                adapter.notifyDataSetChanged();
+                            }
                         });
                     }
 
@@ -69,7 +76,6 @@ public class ViewImagesActivity extends AppCompatActivity {
                     Toast.makeText(ViewImagesActivity.this, "Failed to load images", Toast.LENGTH_SHORT).show();
                 });
     }
-
 
     private class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
 
@@ -83,9 +89,7 @@ public class ViewImagesActivity extends AppCompatActivity {
         @Override
         public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image, parent, false);
-            ImageViewHolder holder = new ImageViewHolder(view);
-            holder.imageView.setImageResource(R.drawable.ic_launcher_foreground);
-            return holder;
+            return new ImageViewHolder(view);
         }
 
         @Override
@@ -94,16 +98,15 @@ public class ViewImagesActivity extends AppCompatActivity {
 
             Glide.with(ViewImagesActivity.this)
                     .load(imageUrl)
-                    .placeholder(R.drawable.ic_launcher_foreground) // Set a placeholder image
+                    .placeholder(R.drawable.ic_launcher_foreground)
+                    .override(320, 320) // Resizing to reduce memory footprint
+                    .thumbnail(0.1f) // Load a low-resolution thumbnail first
                     .into(holder.imageView);
 
-            holder.imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ViewImagesActivity.this, FullScreenImageActivity.class);
-                    intent.putExtra("imageUrl", imageUrl);
-                    startActivity(intent);
-                }
+            holder.imageView.setOnClickListener(v -> {
+                Intent intent = new Intent(ViewImagesActivity.this, FullScreenImageActivity.class);
+                intent.putExtra("imageUrl", imageUrl);
+                startActivity(intent);
             });
         }
 

@@ -36,7 +36,6 @@ public class ImageDownloadService extends IntentService {
 
     private void downloadImage(String imageUrl) {
 
-        // Example using Glide:
         Glide.with(this)
             .asBitmap()
             .load(imageUrl)
@@ -48,7 +47,7 @@ public class ImageDownloadService extends IntentService {
 
                 @Override
                 public void onLoadCleared(@Nullable Drawable placeholder) {
-                    // Handle any cleanup needed
+                    // Handle
                 }
             });
     }

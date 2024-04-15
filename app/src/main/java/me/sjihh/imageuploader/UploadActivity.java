@@ -72,14 +72,12 @@ public class UploadActivity extends AppCompatActivity {
     private void uploadImageToFirebase(Uri imageUri) {
         StorageReference fileRef = storageRef.child("images/" + System.currentTimeMillis() + ".jpg");
 
-        // Declare a final copy of imageUri
         final Uri finalImageUri = imageUri;
 
         fileRef.putFile(finalImageUri)
                 .addOnSuccessListener(taskSnapshot -> {
                     Toast.makeText(UploadActivity.this, "Image uploaded successfully", Toast.LENGTH_SHORT).show();
                     imageView.setImageResource(android.R.color.transparent);
-                    // You can't assign null to the original imageUri variable here
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(UploadActivity.this, "Image upload failed", Toast.LENGTH_SHORT).show();
