@@ -64,9 +64,9 @@ public class ViewImagesActivity extends AppCompatActivity {
                         item.getDownloadUrl().addOnSuccessListener(uri -> {
                             imageUrls.add(uri.toString());
                             loadedImageCount++;
-                            if (loadedImageCount % pageSize == 0 || loadedImageCount == totalItems) {
+                            //if (loadedImageCount % pageSize == 0 || loadedImageCount == totalItems) {
                                 adapter.notifyDataSetChanged();
-                            }
+                            //}
                         });
                     }
 
