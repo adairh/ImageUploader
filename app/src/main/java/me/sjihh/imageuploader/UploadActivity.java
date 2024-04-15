@@ -32,6 +32,7 @@ public class UploadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+
         setContentView(R.layout.activity_upload);
 
         uploadButton = findViewById(R.id.uploadButton);

@@ -38,6 +38,7 @@ public class ViewImagesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FirebaseApp.initializeApp(this);
+
         setContentView(R.layout.activity_view_images);
 
         recyclerView = findViewById(R.id.recyclerView);
